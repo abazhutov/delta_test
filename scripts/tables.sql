@@ -3,7 +3,7 @@ create table CLIENTS(
   PCODE integer primary key,
   FULLNAME varchar(255),
   BDATE date);
-COMMENT ON TABLE TREAT IS '相鲨屙螓';
+COMMENT ON TABLE CLIENTS IS '相鲨屙螓';
 
 insert into CLIENTS values(101, '嚷劳温1 嚷劳1 嚷劳温茸1', '01.01.2020');
 insert into CLIENTS values(102, '嚷劳温2 嚷劳2 嚷劳温茸2', '01.01.2020');
