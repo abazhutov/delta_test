@@ -83,56 +83,8 @@ group by D.DNAME;
 select '14 ¬ывести список прикреплений, дл€ которых стоимость годового прикреплени€ (CLHISTNUM.AMOUNTRUB) меньше половины стоимости фактически оказанных по этому прикреплению услуг (TREAT.AMOUNTJP).'||ascii_char(13)
 '”казать ‘»ќ пациента, номер договора (JPAGREEMENT.AGNUM), номер полиса (CLHISTNUM.NSP), период прикреплени€ (CLHISTNUM.BDATE,FDATE)' from RDB$DATABASE;
 
-select C.FULLNAME, J.AGNUM, CLHN.NSP, CLHN.BDATE, CLHN.FDATE
-from CLHISTNUM CLHN
-join JPAGREEMENT J on J.AGRID = CLHN.AGRID
-join TREAT T on T.HISTID = CLHN.HISTID
-join CLIENTS C on CLHN.PCODE = C.PCODE 
-group by 1,2,3,4,5
-having sum(CLHN.AMOUNTRUB) < sum(T.AMOUNTJP)/2;
-
-----------------
-set term ~;
-execute block(
-  YEAR_IN int := :YEAR_IN
-)
-returns(
-  FULLNAME type of column CLIENTS.FULLNAME,
-  AGNUM    type of column JPAGREEMENT.AGNUM,
-  NSP      type of column CLHISTNUM.NSP,
-  BDATE    type of column CLHISTNUM.BDATE,
-  FDATE    type of column CLHISTNUM.FDATE
-)
-as
-declare 
-begin
-  -- select 
-  --   extract(year from min(BDATE)), 
-  --   extract(year from max(coalesce(FDATE, current_date)))
-  -- from CLHISTNUM
-  -- into :MIN_YEAR, :MAX_YEAR;
-
-  -- lYEAR = :MIN_YEAR;
-  -- while(:lYEAR <= :MAX_YEAR) do
-  -- begin
-    for 
-      select C.FULLNAME, J.AGNUM, CLHN.NSP, CLHN.BDATE, CLHN.FDATE
-      from CLHISTNUM CLHN
-      join JPAGREEMENT J on J.AGRID = CLHN.AGRID
-      join TREAT T on T.HISTID = CLHN.HISTID
-      join CLIENTS C on CLHN.PCODE = C.PCODE 
-      where :YEAR_IN between extract(year from min(BDATE)) and extract(year from max(coalesce(FDATE, current_date)))
-      group by 1,2,3,4,5
-      having sum(CLHN.AMOUNTRUB) < sum(T.AMOUNTJP)/2
-      into :FULLNAME, :AGNUM, :NSP, :BDATE, :FDATE
-    do
-      suspend;
-
-    -- lYEAR = :lYEAR + 1;
-  -- end
-end
-~
-set term ;~
+input P_TEST_14.sql;
+select * from P_TEST_14;
 
 select '15 ≈сли у вас есть опыт разработки сложных отчЄтов, хранимых процедур, интеграций, можете в ответе приложить ссылку на ваш репозиторий github (или другой) с примерами.' from RDB$DATABASE;
 
