@@ -1,0 +1,1 @@
+create database '../db/insurance.fdb' user 'SYSDBA' password 'masterkey' default character set WIN1251;
